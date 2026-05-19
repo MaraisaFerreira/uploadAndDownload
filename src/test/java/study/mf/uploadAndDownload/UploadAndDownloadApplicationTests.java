@@ -1,10 +1,10 @@
-package study.mf.uploadAndDonwload;
+package study.mf.uploadAndDownload;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class UploadAndDonwloadApplicationTests {
+class UploadAndDownloadApplicationTests {
 
 	@Test
 	void contextLoads() {

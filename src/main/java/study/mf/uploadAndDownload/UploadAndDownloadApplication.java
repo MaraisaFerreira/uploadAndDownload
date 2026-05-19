@@ -1,13 +1,13 @@
-package study.mf.uploadAndDonwload;
+package study.mf.uploadAndDownload;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class UploadAndDonwloadApplication {
+public class UploadAndDownloadApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(UploadAndDonwloadApplication.class, args);
+		SpringApplication.run(UploadAndDownloadApplication.class, args);
 	}
 
 }
