@@ -1,15 +1,14 @@
 package study.mf.uploadAndDownload.storage.controller;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.core.io.Resource;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import study.mf.uploadAndDownload.storage.dto.FileResponseDto;
 import study.mf.uploadAndDownload.storage.service.StorageService;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,5 +37,25 @@ public class StorageController {
         }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(uploads);
+    }
+
+    @GetMapping("/download/{fileName:.+}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request){
+        Resource resource = storageService.downloadFile(fileName);
+        String contentType = null;
+
+        try {
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        } catch (IOException ex) {
+            throw new RuntimeException("mime-type cannot be defined");
+        }
+
+        if (contentType == null) contentType = "appication/octet-stream";
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename\""
+                        + resource.getFilename() +"\"").body(resource);
+
     }
 }

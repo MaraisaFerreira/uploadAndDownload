@@ -1,12 +1,15 @@
 package study.mf.uploadAndDownload.storage.service;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import study.mf.uploadAndDownload.config.StorageConfig;
 import study.mf.uploadAndDownload.storage.dto.FileResponseDto;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -44,6 +47,22 @@ public class StorageService {
             return new FileResponseDto(fileName, file.getSize() + "B");
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public Resource downloadFile(String fileName)  {
+        Path filePath = folderPath.resolve(fileName).toAbsolutePath().normalize();
+
+        try {
+            Resource resource = new UrlResource(filePath.toUri());
+
+            if (resource.exists()){
+                return resource;
+            } else {
+                throw new RuntimeException("File not found");
+            }
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("File not found");
         }
     }
 }
