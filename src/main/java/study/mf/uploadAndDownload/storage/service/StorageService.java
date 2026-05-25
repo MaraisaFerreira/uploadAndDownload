@@ -35,6 +35,9 @@ public class StorageService {
         String fileName = file.getOriginalFilename() != null ? file.getOriginalFilename() :
                 String.format("%d-file", Instant.now().toEpochMilli());
 
+        fileName = fileName.contains("..") ? fileName.replace("..", ".") :
+                fileName;
+
         Path filePath = folderPath.resolve(fileName);
         try {
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
