@@ -10,6 +10,9 @@ import org.springframework.web.multipart.MultipartFile;
 import study.mf.uploadAndDownload.storage.dto.FileResponseDto;
 import study.mf.uploadAndDownload.storage.service.StorageService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/storage")
 public class StorageController {
@@ -24,5 +27,16 @@ public class StorageController {
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 storageService.upload(file)
         );
+    }
+
+    @PostMapping("/upload/files")
+    public ResponseEntity<List<FileResponseDto>> uploadFiles(@RequestParam(name = "files")MultipartFile[] files){
+        List<FileResponseDto> uploads = new ArrayList<>();
+
+        for (MultipartFile file : files) {
+            uploads.add(storageService.upload(file));
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(uploads);
     }
 }
