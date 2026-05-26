@@ -1,3 +1,0 @@
-## Work on it...
-
-![workOnIt.png](workOnIt.png)
